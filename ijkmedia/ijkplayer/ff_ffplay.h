@@ -29,6 +29,8 @@
 #include "ff_fferror.h"
 #include "ff_ffmsg.h"
 
+#include "j4a/j4a_base.h"
+
 void      ffp_global_init();
 void      ffp_global_uninit();
 void      ffp_global_set_log_report(int use_report);
@@ -119,4 +121,36 @@ void      ffp_set_property_int64(FFPlayer *ffp, int id, int64_t value);
 // must be freed with free();
 struct IjkMediaMeta *ffp_get_meta_l(FFPlayer *ffp);
 
+/*
+* 截图
+* @param out_file 保存截图文件的全路径，只需要文件路径就行，不需要提前生成文件
+*/
+int ffp_get_current_frame(FFPlayer* ffp,const char* out_file);
+/*
+* 开始录制
+* @param file_name 保存录制文件的全路径，只需要文件路径就行，不需要提前生成文件
+*/
+int ffp_start_record(FFPlayer *ffp, const char *file_name);
+/*
+* 结束录制
+*/
+int ffp_stop_record(FFPlayer *ffp);
+/*
+* 把 packet 包写入文件中
+*/
+int ffp_record_file(FFPlayer *ffp, AVPacket *packet);
+
+/*
+* 判断是否在录制
+*
+*/
+int ffp_is_record(FFPlayer *ffp);
+
+/*
+* 保存图片
+@param out_file 文件路径
+*/
+int save_png(AVFrame *picture, const char *out_file);
+
+AVStream			*m_vStream;
 #endif

@@ -796,3 +796,46 @@ int ijkmp_get_msg(IjkMediaPlayer *mp, AVMessage *msg, int block)
 
     return -1;
 }
+
+
+int ijkmp_get_current_frame(IjkMediaPlayer* mp,const char* file_name) {
+    assert(mp);
+    MPTRACE("ijkmp_get_current_frament()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_get_current_frame(mp->ffplayer, file_name);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_get_current_frament()=%d\n", retval);
+    return retval;
+}
+
+int ijkmp_start_record(IjkMediaPlayer *mp,const char *file_name)
+{
+    assert(mp);
+    MPTRACE("ijkmp_startRecord()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_start_record(mp->ffplayer,file_name);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_startRecord()=%d\n", retval);
+    return retval;
+}
+
+int ijkmp_stop_record(IjkMediaPlayer *mp)
+{
+    assert(mp);
+    MPTRACE("ijkmp_stopRecord()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_stop_record(mp->ffplayer);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_stopRecord()=%d\n", retval);
+    return retval;
+}
+int ijkmp_is_record(IjkMediaPlayer *mp)
+{
+    assert(mp);
+    MPTRACE("ijkmp_is_record()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_is_record(mp->ffplayer);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_is_record()=%d\n", retval);
+    return retval;
+}

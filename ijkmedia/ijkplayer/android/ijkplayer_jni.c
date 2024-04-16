@@ -39,6 +39,7 @@
 #include "ijksdl/android/ijksdl_android_jni.h"
 #include "ijksdl/android/ijksdl_codec_android_mediadef.h"
 #include "ijkavformat/ijkavformat.h"
+#include <android/bitmap.h>
 
 #define JNI_MODULE_PACKAGE      "tv/danmaku/ijk/media/player"
 #define JNI_CLASS_IJKPLAYER     "tv/danmaku/ijk/media/player/IjkMediaPlayer"
@@ -360,6 +361,64 @@ LABEL_RETURN:
     ijkmp_dec_ref_p(&mp);
     return retval;
 }
+
+static int
+IjkMediaPlayer_getCurrentFrame(JNIEnv *env, jclass thiz, jstring name)
+{
+    const char *c_name = (*env)->GetStringUTFChars(env, name, 0);
+    jint retval = 0;
+    IjkMediaPlayer* mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: IjkMediaPlayer_getCurrentFrame: null mp", LABEL_RETURN);
+    retval = ijkmp_get_current_frame(mp,c_name);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    if (c_name)
+        (*env)->ReleaseStringUTFChars(env, name, c_name);
+    return retval;
+}
+
+static jint
+IjkMediaPlayer_startRecord(JNIEnv *env, jclass thiz,jstring file)
+{
+    jint retval = 0;
+    IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: startRecord: null mp", LABEL_RETURN);
+    const char *nativeString = (*env)->GetStringUTFChars(env, file, 0);
+    retval = ijkmp_start_record(mp,nativeString);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    return retval;
+}
+
+static jint
+IjkMediaPlayer_stopRecord(JNIEnv *env, jclass thiz)
+{
+    jint retval = 0;
+    IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: stopRecord: null mp", LABEL_RETURN);
+
+    retval = ijkmp_stop_record(mp);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    return retval;
+}
+static jint
+IjkMediaPlayer_isRecord(JNIEnv *env, jclass thiz)
+{
+    jint retval = 0;
+    IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: isRecord: null mp", LABEL_RETURN);
+
+    retval = ijkmp_is_record(mp);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    return retval;
+}
+
 
 static void
 IjkMediaPlayer_release(JNIEnv *env, jobject thiz)
@@ -1152,6 +1211,12 @@ static JNINativeMethod g_methods[] = {
     { "isPlaying",              "()Z",      (void *) IjkMediaPlayer_isPlaying },
     { "getCurrentPosition",     "()J",      (void *) IjkMediaPlayer_getCurrentPosition },
     { "getDuration",            "()J",      (void *) IjkMediaPlayer_getDuration },
+
+    { "getCurrentFrame",        "(Ljava/lang/String;)I", (void *) IjkMediaPlayer_getCurrentFrame },
+    { "startRecord",            "(Ljava/lang/String;)I",      (void *) IjkMediaPlayer_startRecord },
+    { "stopRecord",             "()I",      (void *) IjkMediaPlayer_stopRecord },
+    { "isRecord",             "()I",      (void *) IjkMediaPlayer_isRecord },
+
     { "_release",               "()V",      (void *) IjkMediaPlayer_release },
     { "_reset",                 "()V",      (void *) IjkMediaPlayer_reset },
     { "setVolume",              "(FF)V",    (void *) IjkMediaPlayer_setVolume },
