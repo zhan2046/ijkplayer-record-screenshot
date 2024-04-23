@@ -2323,9 +2323,10 @@ static int ffplay_video_thread(void *arg)
             pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
             // 截图插入位置，直接复制这段代码即可
             if (ffp->is_screenshot) {
-                J4A_ALOGE("截图保存地址=%s", ffp->screen_file_name);
                 ffp->is_screenshot=0;
+                J4A_ALOGE("截图保存地址=%s", ffp->screen_file_name);
                 save_png(frame, ffp->screen_file_name);
+                ffp->is_screenshot_success = 1;
                 free(ffp->screen_file_name);
                 ffp->screen_file_name = NULL;
             }
@@ -5084,6 +5085,7 @@ int ffp_get_current_frame(FFPlayer* ffp,const char* out_file) {
 
     if (!ffp->is_screenshot){
         ffp->is_screenshot = 1;
+        ffp->is_screenshot_success = 0;
 
         if (ffp->screen_file_name!=NULL) {
             free(ffp->screen_file_name);
@@ -5351,6 +5353,17 @@ int ffp_record_file(FFPlayer *ffp, AVPacket *packet)
 int ffp_is_record(FFPlayer *ffp){
     return ffp->is_record;
 }
+
+//是否开始录制 关键帧
+int ffp_is_record_starting(FFPlayer *ffp){
+    return ffp->record_starting;
+}
+
+//是否截图完成
+int ffp_is_screenshot_success(FFPlayer *ffp){
+    return ffp->is_screenshot_success;
+}
+
 //保存图片
 int save_png(AVFrame *picture, const char *out_file) {
     AVFormatContext *pFormatCtx;

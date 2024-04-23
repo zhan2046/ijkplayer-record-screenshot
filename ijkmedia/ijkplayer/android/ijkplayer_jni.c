@@ -405,6 +405,7 @@ IjkMediaPlayer_stopRecord(JNIEnv *env, jclass thiz)
     ijkmp_dec_ref_p(&mp);
     return retval;
 }
+
 static jint
 IjkMediaPlayer_isRecord(JNIEnv *env, jclass thiz)
 {
@@ -413,6 +414,34 @@ IjkMediaPlayer_isRecord(JNIEnv *env, jclass thiz)
     JNI_CHECK_GOTO(mp, env, NULL, "mpjni: isRecord: null mp", LABEL_RETURN);
 
     retval = ijkmp_is_record(mp);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    return retval;
+}
+
+static jint
+IjkMediaPlayer_isRecordStarting(JNIEnv *env, jclass thiz)
+{
+    jint retval = 0;
+    IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: isRecordStarting: null mp", LABEL_RETURN);
+
+    retval = ijkmp_is_record_starting(mp);
+
+    LABEL_RETURN:
+    ijkmp_dec_ref_p(&mp);
+    return retval;
+}
+
+static jint
+IjkMediaPlayer_isScreenshotSuccess(JNIEnv *env, jclass thiz)
+{
+    jint retval = 0;
+    IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, NULL, "mpjni: isScreenshotSuccess: null mp", LABEL_RETURN);
+
+    retval = ijkmp_is_screenshot_success(mp);
 
     LABEL_RETURN:
     ijkmp_dec_ref_p(&mp);
@@ -1215,7 +1244,9 @@ static JNINativeMethod g_methods[] = {
     { "getCurrentFrame",        "(Ljava/lang/String;)I", (void *) IjkMediaPlayer_getCurrentFrame },
     { "startRecord",            "(Ljava/lang/String;)I",      (void *) IjkMediaPlayer_startRecord },
     { "stopRecord",             "()I",      (void *) IjkMediaPlayer_stopRecord },
-    { "isRecord",             "()I",      (void *) IjkMediaPlayer_isRecord },
+    { "isRecord",               "()I",      (void *) IjkMediaPlayer_isRecord },
+    { "isRecordStarting",       "()I",      (void *) IjkMediaPlayer_isRecordStarting },
+    { "isScreenshotSuccess",    "()I",      (void *) IjkMediaPlayer_isScreenshotSuccess },
 
     { "_release",               "()V",      (void *) IjkMediaPlayer_release },
     { "_reset",                 "()V",      (void *) IjkMediaPlayer_reset },

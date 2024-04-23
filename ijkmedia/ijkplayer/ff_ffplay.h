@@ -147,6 +147,18 @@ int ffp_record_file(FFPlayer *ffp, AVPacket *packet);
 int ffp_is_record(FFPlayer *ffp);
 
 /*
+* 判断是否开始录制 关键帧
+*
+*/
+int ffp_is_record_starting(FFPlayer *ffp);
+
+/*
+* 判断是否截图完成
+*
+*/
+int ffp_is_screenshot_success(FFPlayer *ffp);
+
+/*
 * 保存图片
 @param out_file 文件路径
 */

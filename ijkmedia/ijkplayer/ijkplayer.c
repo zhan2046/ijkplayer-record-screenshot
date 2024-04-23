@@ -829,6 +829,7 @@ int ijkmp_stop_record(IjkMediaPlayer *mp)
     MPTRACE("ijkmp_stopRecord()=%d\n", retval);
     return retval;
 }
+
 int ijkmp_is_record(IjkMediaPlayer *mp)
 {
     assert(mp);
@@ -837,5 +838,27 @@ int ijkmp_is_record(IjkMediaPlayer *mp)
     int retval = ffp_is_record(mp->ffplayer);
     pthread_mutex_unlock(&mp->mutex);
     MPTRACE("ijkmp_is_record()=%d\n", retval);
+    return retval;
+}
+
+int ijkmp_is_record_starting(IjkMediaPlayer *mp)
+{
+    assert(mp);
+    MPTRACE("ijkmp_is_record_starting()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_is_record_starting(mp->ffplayer);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_is_record_starting()=%d\n", retval);
+    return retval;
+}
+
+int ijkmp_is_screenshot_success(IjkMediaPlayer *mp)
+{
+    assert(mp);
+    MPTRACE("ijkmp_is_screenshot_success()\n");
+    pthread_mutex_lock(&mp->mutex);
+    int retval = ffp_is_screenshot_success(mp->ffplayer);
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_is_screenshot_success()=%d\n", retval);
     return retval;
 }

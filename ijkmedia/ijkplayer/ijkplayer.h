@@ -226,4 +226,8 @@ int ijkmp_stop_record(IjkMediaPlayer *mp);
 
 int ijkmp_is_record(IjkMediaPlayer *mp);
 
+int ijkmp_is_record_starting(IjkMediaPlayer *mp);
+
+int ijkmp_is_screenshot_success(IjkMediaPlayer *mp);
+
 #endif

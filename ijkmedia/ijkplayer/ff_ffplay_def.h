@@ -722,6 +722,7 @@ typedef struct FFPlayer {
     int render_wait_start;
 
     int is_screenshot;//是否截图,是一次性的，一次只能截一张图
+    int is_screenshot_success;//是否 截图完成
     char *screen_file_name;//输出图片的路径 screen_file_name;//截图保存地址
 
     AVFormatContext *m_ofmt_ctx;        // 用于输出的AVFormatContext结构体
